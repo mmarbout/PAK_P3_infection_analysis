@@ -5,12 +5,16 @@ TITLE
 
 ## dataset
 
+all the HiC reads can be downloaded on SRA using the following Bioproject reference: PRJNA XXX
+The RNA seq reads from Chevalereau et al. 2016 can downloaded on SRA using the following Bioproject reference: PRJNA XXX
 
 ## dependencies
 
 
 ## analysis
 
-### contact map construction
+### contact map construction (mcool files)
 
-hicstuff
+```sh
+hicstuff 
+```
