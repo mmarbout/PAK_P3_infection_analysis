@@ -10,6 +10,9 @@ The RNA seq reads from Chevalereau et al. 2016 can downloaded on SRA using the f
 
 ## dependencies
 
+- Hicstuff (link)
+- cooler 
+- R packages (HiCcontact, HiCexperiment)
 
 ## analysis
 
@@ -18,3 +21,15 @@ The RNA seq reads from Chevalereau et al. 2016 can downloaded on SRA using the f
 ```sh
 hicstuff 
 ```
+
+### contact map generation for host and phage
+
+
+### 4C-plot 
+
+
+
+### contact map comparison
+
+
+
