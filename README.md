@@ -14,12 +14,15 @@ The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO
 - cooler (https://github.com/open2c/cooler)
 - R packages (https://github.com/js2264/HiCExperiment)
 - bowtie2
+- tidycoverage (https://github.com/js2264/tidyCoverage)
 
 ## home made scripts
 
 different scripts need to be downloaded from the github repository.
 
-## analysis
+## Data generation
+
+the first steps will be to generate the HiC mcool files and the RNA bigwig files.
 
 ### contact map construction (mcool files)
 
@@ -61,19 +64,24 @@ cooler zoomify -r 1000N --balance -o lib_merge.mcool lib_merge_500bp.cool
 
 ### RNAseq track generation (bigwig files)
 
+```sh
+tinyMapper.sh -m RNA -s "$work_dir"/fastq/RNA/"$project" -o "$work_dir"/RNA_track/"$project" -g "$work_dir"/fasta/deinoc_V2	--threads 24
+```
+
+## analysis
 
 ### contact map generation for host and phage
 
 contact map generation for the P. aeruginosa PAK (you can generate contact map at different resolutions)
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK:1-6000000 5000 
+plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK:1-6395872 5000 
 ```
 
 contact map generation for the PAK_P3 phage 
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK_P3:1-88000 500 
+plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK_P3:1-88097 500 
 ```
 
 ### Directionnal index
