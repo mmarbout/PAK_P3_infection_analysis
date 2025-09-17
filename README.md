@@ -10,9 +10,9 @@ The RNA seq reads from Chevalereau et al. 2016 can downloaded on SRA using the f
 
 ## dependencies
 
-- Hicstuff (link)
-- cooler 
-- R packages (HiCcontact, HiCexperiment)
+- Hicstuff (https://github.com/koszullab/hicstuff)
+- cooler (https://github.com/open2c/cooler)
+- R packages (https://github.com/js2264/HiCExperiment)
 
 ## analysis
 
