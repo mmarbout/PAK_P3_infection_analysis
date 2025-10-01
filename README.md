@@ -29,12 +29,12 @@ the first steps will be to generate the HiC mcool files and the RNA bigwig files
 
 different argument need to be set (you will have to do that for the different libraries)
 
-genome=PAK_PAKP3
-project=MM37
-reads_for=MM37_nvq_R1.fq.gz
-reads_rev=MM37_nvq_R2.fq.gz
-out_reads=MM37_digest
-cpu=64
+- genome=PAK_PAKP3
+- project=MM37
+- reads_for=MM37_nvq_R1.fq.gz
+- reads_rev=MM37_nvq_R2.fq.gz
+- out_reads=MM37_digest
+- cpu=64
 
 first, pre-digest the reads using the cutsite module from hicstuff.
 
