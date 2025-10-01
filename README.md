@@ -1,13 +1,16 @@
 # PAK_P3_infection_analysis
 
 this set of scripts is dedicated to the analysis of PAK_P3 infection cycle and refered to the publication:
-"3D genomic reveal specific patterns of phage genome dynamics and host interactions during lytic infection of Pseudomonas aeruginosa."
+"3D genomic reveals phage genome dynamics and host interactions during lytic infection of Pseudomonas aeruginosa."
 
 ## dataset
 
 all the HiC reads can be downloaded on SRA using the following Bioproject reference: PRJNA1331554
 The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO portal (GSE76513).
 The FastA reference file can be downloaded on the github.
+
+if you want to skip the generation of raw data files, you can find them at the following link : 
+- faire un repo Zenodo pour les fichiers mcool & co
 
 ## dependencies
 
@@ -19,7 +22,7 @@ The FastA reference file can be downloaded on the github.
 
 ## home made scripts
 
-different scripts need to be downloaded from the github repository.
+different scripts need to be downloaded from the github repository and put in a dedicated directory named [scripts]
 
 ## Data generation
 
@@ -29,7 +32,7 @@ the first steps will be to generate the HiC mcool files and the RNA bigwig files
 
 different argument need to be set (you will have to do that for the different libraries)
 
-- genome=PAK_PAKP3
+- genome=PAK_PAKP3.fa
 - project=MM37
 - reads_for=MM37_nvq_R1.fq.gz
 - reads_rev=MM37_nvq_R2.fq.gz
@@ -53,9 +56,9 @@ Launch the pipeline hicstuff to generate the mcool files
 ```sh
 hicstuff pipeline -t "$cpu" -D -d -f --plot -F --binning 500 --enzyme DpnII,HinfI -o "$project" -g "$project"/index/idx	"$out_reads"_R1.fq.gz "$out_reads"_R2.fq.gz
 ```
-at this step, you should obtain a mcool file: MM37.mcool
+at this step, you should obtain a mcool file: MM37.mcool as well as other mandatory files to pursue the analysis like the distance law file: distance_law.txt
 
-You have to obtain all the mcool files for the different libraries.
+You have to obtain all the output files for the different libraries.
 Several libraries have been sequenced on different lanes of sequencing apparatus (i.e. MM142, MM143 ...) and will need to be merged using cooler.
 
 ```sh
@@ -108,6 +111,9 @@ done
 ### pileup HiC - RNA
 
 ### RNA track plots
+
+
+### distance law plots
 
 ### HiC and RNA correlation
 
