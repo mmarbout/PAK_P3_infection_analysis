@@ -107,6 +107,20 @@ done
 
 ### Directionnal index
 
+DI analysis allow to detect CIDs in bacterial chromosomes (i.e. Chromosome Interacting Domains)
+
+```sh
+directionnal_index.R MM37.mcool LR657304.1:1-6395872 10000 10 Fig1+supp/CID_MM37.pdf 
+```
+### HiC and RNA correlation
+
+it is also possible to diretly look at the correlation between HiC signal and transcription signal
+
+```sh
+HiC_RNA_correlation.R MM37_filter.mcool 1000 LR657304.1:1-6395872 T0_rep1_unstranded.bw 1000 MM37_HiC_RNA_correlation.pdf
+```
+
+
 
 ### pileup HiC - RNA
 
@@ -115,7 +129,7 @@ done
 
 ### distance law plots
 
-### HiC and RNA correlation
+
 
 
 ### 3D model
