@@ -5,8 +5,9 @@ this set of scripts is dedicated to the analysis of PAK_P3 infection cycle and r
 
 ## dataset
 
-all the HiC reads can be downloaded on SRA using the following Bioproject reference: PRJNA XXX
+all the HiC reads can be downloaded on SRA using the following Bioproject reference: PRJNA1331554
 The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO portal (GSE76513).
+The FastA reference file can be downloaded on the github.
 
 ## dependencies
 
@@ -75,14 +76,31 @@ tinyMapper.sh -m RNA -s "$work_dir"/fastq/RNA/"$project" -o "$work_dir"/RNA_trac
 contact map generation for the P. aeruginosa PAK (you can generate contact map at different resolutions)
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK:1-6395872 5000 
+plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf LR657304.1:1-6395872 5000 
 ```
 
 contact map generation for the PAK_P3 phage 
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf PAK_P3:1-88097 500 
+plot_matrices_zoom.R lib.mcool lib_PAKP3_500b.pdf NC_022970.1:1-88097 500 
 ```
+
+you can obviously do a for loop to generate all the contact map for the different libraries and at different resolutions
+
+```sh
+for lib in MM53 MM54 MM55 MM56 MM57 MM58
+do
+  for resolution in 1000 2000 5000
+  do
+    plot_matrices_zoom.R "$lib".mcool "$lib"_PAK_5kb.pdf LR657304.1:1-88097 "$resolution"
+  done
+  for resolution in 500 1000
+  do
+     plot_matrices_zoom.R "$lib".mcool "$lib"_PAKP3_5kb.pdf NC_022970.13:1-88097 "$resolution"
+  done
+done
+```
+
 
 ### Directionnal index
 
