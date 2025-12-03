@@ -90,11 +90,12 @@ tinyMapper.sh -m RNA -s "$work_dir"/fastq/RNA/"$project" -o "$work_dir"/RNA_trac
 ## analysis
 
 once you have obtained all the different raw files, you can go to the next part and start the analysis.
-now you should organize your folder like this and put the different files in the dedicated directory:
+now you should organize your folder like this and put the different files in the dedicated directories:
 
 ```sh
 mkdir -p rna_track/
 mkdir -p mcool/
+mkdir -p distance_law/
 mkdir -p pdb/
 mkdir -p ref/
 mkdir -p plot/
@@ -122,7 +123,7 @@ for lib in MM53 MM54 MM55 MM56 MM57 MM58
 do
   for resolution in 1000 2000 5000
   do
-    script/plot_matrices_zoom.R mcool/"$lib".mcool "$resolution" LR657304.1:1-88097 plot/"$lib"_PAK_5kb.pdf 
+    script/plot_matrices_zoom.R mcool/"$lib".mcool "$resolution" LR657304.1:1-6395872 plot/"$lib"_PAK_5kb.pdf 
   done
   for resolution in 500 1000
   do
@@ -174,24 +175,45 @@ another way to plot the transcription signal is to use the following command lin
 script/HiC_RNAtrack.R mcool/MM37.mcool rna_track/T0_rep1_forward.bw rna_track/T0_rep1_reverse.bw ref/PAK.gff plot/RNA_HiC_rep1.pdf 500 LR657304.1:1950000-2050000 1950000 2050000 500
 ```
 
-### distance law plots (Supp Fig.1)
+### distance law plots (Supp Fig.1 and Fig3)
 
+plot of the distance law (i.e. p(s)) is a typical analysis of HiC data and is part of the hicstuff pipeline output. You can also genreate it from the pairs files (https://jserizay.com/OHCA/docs/devel/ - chapter 6).
 
+in the present case and in order to plot all the data on the same plot, we will use the output [distance_law.txt] from hicstuff.
 
+```sh
+script/distance_law_plot.R plot/distance_law_PAKP3_rep1.pdf NC_022970.1 T0 distance_law/MM37_distance_law.txt T3 distance_law/MM53_distance_law.txt T5 distance_law/MM54_distance_law.txt T7 distance_law/MM55_distance_law.txt T10 distance_law/MM56_distance_law.txt T13 distance_law/MM57_distance_law.txt T16 distance_law/MM58_distance_law.txt
+```
 
 ### 3D model
 
+the output from 3DGB is not directly usable by the software pymol. We will modified it in order to add information of the links betweens the bins and add colors.
+
+```sh
+script/3D_PDB.sh pdb/MM53_raw.pdb pdb/MM53_treated.pdb
+```
+
+you can then load the pdb files in Pymol and use the script [visualize_genome.pml] to obtain the same structure are the ones in the paper.
 
 
-### contact map comparison
+### contact map comparison (Supp Fig.2)
 
+one way to compare contact map in different conditions is to plot a log ratio of two contact map.
 
+```sh
+script/HiC_comparaison_zoom.R mcool/MM37.mcool mcool/MM57.mcool plot/MM37_vs_MM57_PAK.pdf LR657304.1:1-6395872 5000
+```
 
-### 4C-plot
+### 4C-plot (Fig.4)
 
+4C plot allow to plot the normalized contact signal of one area again a set of bins. Here, we will plot the contact of the phage against the genome of its host.
+The script will also generate a .tsv file that will be needed to compute the correlation of this 4C siganl with HiC and RNA signal (see below).
 
+```sh
+script/4C_phage.R mcool/MM37.mcool,mcool/MM53.mcool,mcool/MM54.mcool,mcool/MM55.mcool,mcool/MM56.mcool,mcool/MM57.mcool,mcool/MM58.mcool 5000 LR657304.1:1-6395872 NC_022970.1:1-88097 T0,T3,T5,T7,T10,T13,T16 plot/4C_rep1.tsv plot/4C_rep1.pdf
+```
 
-### 4C and RNA correlation
+### 4C and HiC/RNA correlation (Fig.4)
 
 
 
