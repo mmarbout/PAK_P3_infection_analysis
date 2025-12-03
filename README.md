@@ -9,8 +9,8 @@ all the HiC reads can be downloaded on SRA using the following Bioproject refere
 The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO portal (GSE76513).
 The FastA reference file can be downloaded on the github.
 
-if you want to skip the generation of raw data files, you can find them at the following link : 
-- faire un repo Zenodo pour les fichiers mcool & co
+if you want to skip the generation of raw data files (mcool, bigwig, bed and pdb files), you can find them on the following Zenodo repository : 
+10.5281/zenodo.17529627
 
 ## dependencies
 
@@ -18,7 +18,8 @@ if you want to skip the generation of raw data files, you can find them at the f
 - cooler (https://github.com/open2c/cooler)
 - R packages (https://github.com/js2264/HiCExperiment)
 - bowtie2
-- tidycoverage (https://github.com/js2264/tidyCoverage)
+- tinymapper (https://github.com/js2264/tinyMapper)
+- bacchus (https://github.com/ABignaud/bacchus)
 
 ## home made scripts
 
@@ -66,6 +67,13 @@ cooler merge lib_merge_500bp.cool lib1.mcool::/resolutions/500 lib2.mcool::/reso
 cooler zoomify -r 1000N --balance -o lib_merge.mcool lib_merge_500bp.cool
 ```
 
+the following server can be another option to generate the mcool files : 
+
+https://bioi2.i2bc.paris-saclay.fr/hicstuff/
+
+you will need to go to this server to generate the pdb files
+
+
 ### RNAseq track generation (bigwig files)
 
 ```sh
@@ -107,24 +115,27 @@ done
 
 ### Directionnal index
 
-DI analysis allow to detect CIDs in bacterial chromosomes (i.e. Chromosome Interacting Domains)
-
 ```sh
 directionnal_index.R MM37.mcool LR657304.1:1-6395872 10000 10 Fig1+supp/CID_MM37.pdf 
 ```
 ### HiC and RNA correlation
 
-it is also possible to diretly look at the correlation between HiC signal and transcription signal
-
 ```sh
 HiC_RNA_correlation.R MM37_filter.mcool 1000 LR657304.1:1-6395872 T0_rep1_unstranded.bw 1000 MM37_HiC_RNA_correlation.pdf
 ```
 
-
-
 ### pileup HiC - RNA
 
+```sh
+mkdir pileup/
+```
+
+```sh
+pileup_genes.py --rna-input T0_rep1_unstranded.bw --annotation-input /Users/martial/Desktop/Projets/Pseudomonas/ref/Prokka_PAK/PAK.gff --hic-input /MM37_filter.mcool --binning 1000 --window 20000 --threshold 10 --circular yes --out-dir pileup/
+```
+
 ### RNA track plots
+
 
 
 ### distance law plots
@@ -134,11 +145,19 @@ HiC_RNA_correlation.R MM37_filter.mcool 1000 LR657304.1:1-6395872 T0_rep1_unstra
 
 ### 3D model
 
+
+
 ### contact map comparison
+
+
 
 ### 4C-plot
 
+
+
 ### 4C and RNA correlation
+
+
 
 
 
