@@ -21,9 +21,13 @@ if you want to skip the generation of raw data files (mcool, bigwig, bed and pdb
 - tinymapper (https://github.com/js2264/tinyMapper)
 - bacchus (https://github.com/ABignaud/bacchus)
 
-## home made scripts
+those ones are the main dependencies to generate the raw data but they are many others dependencies needed like ggplot depending on what you want to do and you will find them in the different scripts.
 
-different scripts need to be downloaded from the github repository and put in a dedicated directory named [scripts]
+## home made scripts and reference genome
+
+Different scripts need to be downloaded from the github repository and put in a dedicated directory named [script].
+you will also need the fasta and gff files for the two genomes and put them in a dedicated directory named [ref].
+
 
 ## Data generation
 
@@ -61,18 +65,21 @@ at this step, you should obtain a mcool file: MM37.mcool as well as other mandat
 
 You have to obtain all the output files for the different libraries.
 Several libraries have been sequenced on different lanes of sequencing apparatus (i.e. MM142, MM143 ...) and will need to be merged using cooler.
+Be carefull to use the right reference genome for the different libraries (especially for the one with the plasmid pJN105).
 
 ```sh
 cooler merge lib_merge_500bp.cool lib1.mcool::/resolutions/500 lib2.mcool::/resolutions/500 lib3.mcool::/resolutions/500
 cooler zoomify -r 1000N --balance -o lib_merge.mcool lib_merge_500bp.cool
 ```
 
-the following server can be another option to generate the mcool files : 
+the following server can be another option to generate the mcool and pdb files : 
 
 https://bioi2.i2bc.paris-saclay.fr/hicstuff/
 
-you will need to go to this server to generate the pdb files
 
+### PDB files generation - 3D structure
+
+to generate the PDB files, you can either install the 3DGB pipeline (https://github.com/data-fun/3d-genome-builder) or use the i2bc server (https://bioi2.i2bc.paris-saclay.fr/hicstuff/).
 
 ### RNAseq track generation (bigwig files)
 
@@ -82,18 +89,30 @@ tinyMapper.sh -m RNA -s "$work_dir"/fastq/RNA/"$project" -o "$work_dir"/RNA_trac
 
 ## analysis
 
+once you have obtained all the different raw files, you can go to the next part and start the analysis.
+now you should organize your folder like this and put the different files in the dedicated directory:
+
+```sh
+mkdir -p rna_track/
+mkdir -p mcool/
+mkdir -p pdb/
+mkdir -p ref/
+mkdir -p plot/
+mkdir -p script/
+```
+
 ### contact map generation for host and phage
 
 contact map generation for the P. aeruginosa PAK (you can generate contact map at different resolutions)
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAK_5kb.pdf LR657304.1:1-6395872 5000 
+script/plot_matrices_zoom.R mcool/lib.mcool 5000 LR657304.1:1-6395872 plot/lib_PAK_5kb.pdf   
 ```
 
 contact map generation for the PAK_P3 phage 
 
 ```sh
-plot_matrices_zoom.R lib.mcool lib_PAKP3_500b.pdf NC_022970.1:1-88097 500 
+script/plot_matrices_zoom.R mcool/lib.mcool 500 NC_022970.1:1-88097 plot/lib_PAKP3_500b.pdf  
 ```
 
 you can obviously do a for loop to generate all the contact map for the different libraries and at different resolutions
@@ -103,42 +122,59 @@ for lib in MM53 MM54 MM55 MM56 MM57 MM58
 do
   for resolution in 1000 2000 5000
   do
-    plot_matrices_zoom.R "$lib".mcool "$lib"_PAK_5kb.pdf LR657304.1:1-88097 "$resolution"
+    script/plot_matrices_zoom.R mcool/"$lib".mcool "$resolution" LR657304.1:1-88097 plot/"$lib"_PAK_5kb.pdf 
   done
   for resolution in 500 1000
   do
-     plot_matrices_zoom.R "$lib".mcool "$lib"_PAKP3_5kb.pdf NC_022970.13:1-88097 "$resolution"
+     script/plot_matrices_zoom.R mcool/"$lib".mcool "$resolution" NC_022970.13:1-88097 plot/"$lib"_PAKP3_5kb.pdf  
   done
 done
 ```
-
-
-### Directionnal index
+### autocorrelartion contact map (Fig1.d)
 
 ```sh
-directionnal_index.R MM37.mcool LR657304.1:1-6395872 10000 10 Fig1+supp/CID_MM37.pdf 
-```
-### HiC and RNA correlation
-
-```sh
-HiC_RNA_correlation.R MM37_filter.mcool 1000 LR657304.1:1-6395872 T0_rep1_unstranded.bw 1000 MM37_HiC_RNA_correlation.pdf
+script/plot_matrices_autocorrelation.R mcool/lib.mcool LR657304.1:2000000-3500000 plot/lib_PAK_5kb.pdf  
 ```
 
-### pileup HiC - RNA
+### Directionnal index (Fig1.a)
 
 ```sh
-mkdir pileup/
+script/directionnal_index.R mcool/MM37.mcool LR657304.1:1-6395872 10000 10 plot/CID_MM37.pdf 
+```
+
+### HiC and RNA correlation (Fig1.a)
+
+```sh
+script/HiC_RNA_correlation.R mcool/MM37_filter.mcool 1000 LR657304.1:1-6395872 rna_track/T0_rep1_unstranded.bw 1000 plot/MM37_rep1_HiC_RNA_correlation.pdf
+```
+
+### pileup HiC - RNA (Fig1.c)
+
+```sh
+mkdir -p plot/pileup_MM37_rep1/
 ```
 
 ```sh
-pileup_genes.py --rna-input T0_rep1_unstranded.bw --annotation-input /Users/martial/Desktop/Projets/Pseudomonas/ref/Prokka_PAK/PAK.gff --hic-input /MM37_filter.mcool --binning 1000 --window 20000 --threshold 10 --circular yes --out-dir pileup/
+script/pileup_genes.py --rna-input rna_track/T0_rep1_unstranded.bw --annotation-input ref/PAK.gff --hic-input mcool/MM37_filter.mcool --binning 1000 --window 20000 --threshold 10 --circular yes --out-dir plot/pileup_MM37_rep1/
 ```
 
 ### RNA track plots
 
+you can plot the different transcriptionnal signal using the following command line
 
+```sh
+script/RNA_track.R rna_track/T0_rep1_forward.bw rna_track/TT0_rep1_reverse.bw plot/RNA_T0_rep1.pdf LR657304.1:1-6395872 1 6395872 5000 ref/PAK.gff
+```
 
-### distance law plots
+### HiC and RNA track plots (Fig1.b)
+
+another way to plot the transcription signal is to use the following command line that will plot the contact map and the RNA signal on the same plot.
+
+```sh
+script/HiC_RNAtrack.R mcool/MM37.mcool rna_track/T0_rep1_forward.bw rna_track/T0_rep1_reverse.bw ref/PAK.gff plot/RNA_HiC_rep1.pdf 500 LR657304.1:1950000-2050000 1950000 2050000 500
+```
+
+### distance law plots (Supp Fig.1)
 
 
 
