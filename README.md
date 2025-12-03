@@ -100,6 +100,7 @@ mkdir -p pdb/
 mkdir -p ref/
 mkdir -p plot/
 mkdir -p script/
+mkdir -p data_files/
 ```
 
 ### contact map generation for host and phage
@@ -215,11 +216,48 @@ script/4C_phage.R mcool/MM37.mcool,mcool/MM53.mcool,mcool/MM54.mcool,mcool/MM55.
 
 ### 4C and HiC/RNA correlation (Fig.4)
 
+the first step is to export hic, rna and 4C signal for all the time points.
 
+let's start with the HiC data:
 
+```sh
+for id in MM37_T0 MM53_T3 MM54_T5 MM55_T7 MM56_T10 MM57_T13 MM58_T16
+do
+  Time=$(echo "$id" | sed 's/_/ /' | awk '{print $2}')
+  lib=$(echo "$id" | sed 's/_/ /' | awk '{print $1}')
+  script/export_HiC_signal.R mcool/"$lib".mcool 5000 LR657304.1:1-6395872 data_files/"$Time"_HiC.tsv 5
+done
+```
+then the RNA data
 
+```sh
+for rep in 1 2 3
+do
+  for Time in T0 T3 T6
+  do
+    mkdir -p temp/
+    script/export_rna_track.R bigwig/"$Time"_rep"$rep"_unstranded.bw temp/temp1.tsv LR657304.1:1-6395872 5000
+    cat temp/temp1.tsv | sed '1d' | awk '{print $2}' > data_files/"$Time"_rep"$rep"_RNA.tsv
+  done
+done
+```
 
+and finally the 4C signal 
 
+```sh
+for Time in T0 T3 T5 T7 T20 T13 T16
+do
+  cat plot/4C_rep1.tsv | grep "$Time" | awk '{print $2}' > data_files/"$Time"_4C.tsv
+done
+```
+
+now we can compile everything in two files
+
+```sh
+echo "bin 4C_T0 4C_T3 4C_T5 4C_T7 4C_T10 4C_T13 4C_T16 HiC_T0 HiC_T3 HiC_T5 HiC_T7 HiC_T10 HiC_T13 HiC_T16" | sed 's/ /\t/g' > temp/header.temp
+cat -n data_files/T0_4C.tsv | awk '{print $1}' > data_files/bin.tsv
+paste data_files/T0_4C.tsv data_files/T3_4C.tsv data_files/T5_4C.tsv data_files/T7_4C.tsv data_files/T10_4C.tsv data_files/T13_4C.tsv data_files/T16_4C.tsv data_files/T0_HiC.tsv data_files/T3_HiC.tsv data_files/T5_HiC.tsv data_files/T7_HiC.tsv data_files/T10_HiC.tsv data_files/T13_HiC.tsv data_files/T16_HiC.tsv > temp/data.temp
+```
 
 
 
