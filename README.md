@@ -254,10 +254,20 @@ done
 now we can compile everything in two files
 
 ```sh
-echo "bin 4C_T0 4C_T3 4C_T5 4C_T7 4C_T10 4C_T13 4C_T16 HiC_T0 HiC_T3 HiC_T5 HiC_T7 HiC_T10 HiC_T13 HiC_T16" | sed 's/ /\t/g' > temp/header.temp
-cat -n data_files/T0_4C.tsv | awk '{print $1}' > data_files/bin.tsv
-paste data_files/T0_4C.tsv data_files/T3_4C.tsv data_files/T5_4C.tsv data_files/T7_4C.tsv data_files/T10_4C.tsv data_files/T13_4C.tsv data_files/T16_4C.tsv data_files/T0_HiC.tsv data_files/T3_HiC.tsv data_files/T5_HiC.tsv data_files/T7_HiC.tsv data_files/T10_HiC.tsv data_files/T13_HiC.tsv data_files/T16_HiC.tsv > temp/data.temp
+echo "bin 4C_T0 4C_T3 4C_T5 4C_T7 4C_T10 4C_T13 4C_T16 HiC_T0 HiC_T3 HiC_T5 HiC_T7 HiC_T10 HiC_T13 HiC_T16" | sed 's/ /\t/g' > data_files/data_4C_HiC.tsv
+cat -n data_files/T0_4C.tsv | awk '{print $1}' > temp/bin.temp
+paste temp/bin.temp data_files/T0_4C.tsv data_files/T3_4C.tsv data_files/T5_4C.tsv data_files/T7_4C.tsv data_files/T10_4C.tsv data_files/T13_4C.tsv data_files/T16_4C.tsv data_files/T0_HiC.tsv data_files/T3_HiC.tsv data_files/T5_HiC.tsv data_files/T7_HiC.tsv data_files/T10_HiC.tsv data_files/T13_HiC.tsv data_files/T16_HiC.tsv >> data_files/data_4C_HiC.tsv
 ```
 
+```sh
+echo "bin 4C_T0 4C_T3 4C_T5 4C_T7 4C_T10 4C_T13 4C_T16 RNA_rep1_T0 RNA_rep2_T0 RNA_rep3_T0 RNA_rep1_T3 RNA_rep2_T3 RNA_rep3_T3 RNA_rep1_T13 RNA_rep2_T13 RNA_rep3_T13" | sed 's/ /\t/g' > data_files/data_4C_RNA.tsv
+cat -n data_files/T0_4C.tsv | awk '{print $1}' > temp/bin.temp
+paste temp/bin.temp data_files/T0_4C.tsv data_files/T3_4C.tsv data_files/T5_4C.tsv data_files/T7_4C.tsv data_files/T10_4C.tsv data_files/T13_4C.tsv data_files/T16_4C.tsv data_files/T0_rep1_RNA.tsv data_files/T0_rep2_RNA.tsv data_files/T0_rep3_RNA.tsv data_files/T3_rep1_RNA.tsv data_files/T3_rep2_RNA.tsv data_files/T3_rep3_RNA.tsv data_files/T13_rep1_RNA.tsv data_files/T13_rep2_RNA.tsv data_files/T13_rep3_RNA.tsv >> data_files/data_4C_RNA.tsv
+```
 
+once you have obtained the two files you can launch the dedicated R script:
+
+```sh
+script/correlation_4C_HiC_RNA.r data_files/data_4C_HiC.tsv data_files/data_4C_RNA.tsv plot/table_4C_HiC_corr.pdf plot/table_4C_RNA_corr.pdf 
+```
 
