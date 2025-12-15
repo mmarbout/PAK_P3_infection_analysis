@@ -1,27 +1,40 @@
 # PAK_P3_infection_analysis
 
 this set of scripts is dedicated to the analysis of PAK_P3 infection cycle and refered to the publication:
-"3D genomic reveals phage genome dynamics and host interactions during lytic infection of Pseudomonas aeruginosa."
+"Bacteriophage PAK_P3 genome structuration and dynamics during infection of Pseudomonas aeruginosa reveal specific interactions patterns"
+
+<p align="center">
+  <img src="images/model.png" width="200">
+</p>
 
 ## dataset
 
 all the HiC reads can be downloaded on SRA using the following Bioproject reference: PRJNA1331554
 The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO portal (GSE76513).
-The FastA reference file can be downloaded on the github.
+The FastA reference file can be downloaded directly from the github.
+
+<p align="center">
+  <img src="images/data.png" width="200">
+</p>
 
 if you want to skip the generation of raw data files (mcool, bigwig, bed and pdb files), you can find them on the following Zenodo repository : 
 10.5281/zenodo.17529627
 
+[dataset](https://doi.org/10.5281/zenodo.17529627)
+
+
 ## dependencies
 
-- Hicstuff (https://github.com/koszullab/hicstuff)
-- cooler (https://github.com/open2c/cooler)
-- R packages (https://github.com/js2264/HiCExperiment)
-- bowtie2
-- tinymapper (https://github.com/js2264/tinyMapper)
-- bacchus (https://github.com/ABignaud/bacchus)
+- [Hicstuff](https://github.com/koszullab/hicstuff)
+- [cooler](https://github.com/open2c/cooler)
+- [HiCExperiment](https://github.com/js2264/HiCExperiment)
+- [bowtie2](https://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
+- [tinymapper](https://github.com/js2264/tinyMapper)
+- [bacchus](https://github.com/ABignaud/bacchus)
+- [3D Genome Builder](https://github.com/data-fun/3d-genome-builder)
+- [pymol](https://www.pymol.org/)
 
-those ones are the main dependencies to generate the raw data but they are many others dependencies needed like ggplot depending on what you want to do and you will find them in the different scripts.
+You will also need different R packages and python libraries that shoukd come along with the different dependencies.
 
 ## home made scripts and reference genome
 
