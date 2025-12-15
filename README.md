@@ -4,7 +4,7 @@ this set of scripts is dedicated to the analysis of PAK_P3 infection cycle and r
 "Bacteriophage PAK_P3 genome structuration and dynamics during infection of Pseudomonas aeruginosa reveal specific interactions patterns"
 
 <p align="center">
-  <img src="images/model.png" width="200">
+  <img src="images/model.png" width="800">
 </p>
 
 ## dataset
@@ -14,7 +14,7 @@ The RNA seq reads from Chevalereau et al. 2016 can be downloaded on the NCBI GEO
 The FastA reference file can be downloaded directly from the github.
 
 <p align="center">
-  <img src="images/data.png" width="200">
+  <img src="images/data.png" width="800">
 </p>
 
 if you want to skip the generation of raw data files (mcool, bigwig, bed and pdb files), you can find them on the following Zenodo repository : 
