@@ -34,7 +34,7 @@ if you want to skip the generation of raw data files (mcool, bigwig, bed and pdb
 - [3D Genome Builder](https://github.com/data-fun/3d-genome-builder)
 - [pymol](https://www.pymol.org/)
 
-You will also need different R packages and python libraries that shoukd come along with the different dependencies.
+You will also need different R packages and python libraries that should come along with the different dependencies installation.
 
 ## home made scripts and reference genome
 
